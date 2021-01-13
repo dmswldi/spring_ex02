@@ -8,6 +8,8 @@
     SELECT * FROM tbl_board WHERE bno > 0
   ]]>
   </select>
+  <!-- 꺽새 태그 오해 금지! -->
+  <!-- index를 이용하여 빠른 search => primary key에 조건 주기 -->
   
   <insert id="insert" >
   	INSERT INTO tbl_board (bno, title, content, writer) 

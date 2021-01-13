@@ -22,3 +22,23 @@ commit;
 
 SELECT * FROM tbl_board WHERE bno > 0;
 SELECT seq_board.nextval FROM dual;
+
+CREATE SEQUENCE seq_comment;
+
+DROP TABLE tbl_comment;
+CREATE TABLE tbl_comment (
+    cno NUMBER(10, 0),-- GENERATED AS IDENTITY
+    bno NUMBER(10, 0) NOT NULL,
+    content VARCHAR2(500) NOT NULL,
+    writer VARCHAR2(50) NOT NULL,
+    regdate DATE DEFAULT sysdate,
+    PRIMARY KEY (cno)
+);
+
+ALTER TABLE tbl_comment ADD updatedate DATE DEFAULT sysdate;
+
+INSERT INTO tbl_comment
+VALUES (seq_comment.nextval, 1, 'eunjiya anyoung', 'yun', sysdate, sysdate);
+
+SELECT * FROM tbl_comment;
+commit;
