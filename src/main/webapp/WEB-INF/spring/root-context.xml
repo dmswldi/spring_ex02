@@ -24,5 +24,6 @@
 		<property name="dataSource" ref="dataSource"></property> <!-- injection, mybatis는 conn 열고 닫고, datasource(CP)에 의존 -->
 	</bean>
 	
-	<mybatis-spring:scan base-package="org.zerock.mapper"/> <!-- mybatis한테 인터페이스 존재 알리기, mybatis가 구현 클래스 만듦 -->	
+	<mybatis-spring:scan base-package="org.zerock.mapper"/> <!-- mybatis(DB접근자)한테 인터페이스 존재 알리기, mybatis가 구현 클래스 만듦 -->	
+	<context:component-scan base-package="org.zerock.service"/> <!-- 인터페이스를 bean으로 등록! -->
 </beans>

@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -62,5 +63,65 @@ public class BoardMapperTests {
 		
 		assertEquals(before + 1, after);
 		assertNotEquals(board.getBno(), new Long(0));
+	}
+	
+	@Test
+	public void testRead() {// 마지막 @Test부터 실행되네
+		BoardVO board = new BoardVO();
+		board.setTitle("its me3");
+		board.setContent("hello3");
+		board.setWriter("eunji3");
+		
+		mapper.insertSelectKey(board);
+		
+		BoardVO readBoard = mapper.read(board.getBno());
+		
+		assertNotNull(readBoard);
+		assertEquals(readBoard.getBno(), board.getBno());
+		log.info("readBoard is : " + readBoard);//????
+	}
+	
+	@Test
+	public void testDelete() {
+		BoardVO board = new BoardVO();
+		board.setTitle("its me333");
+		board.setContent("hello333");
+		board.setWriter("eunji333");
+		
+		mapper.insertSelectKey(board);
+		
+		int before = mapper.getList().size();
+		
+		int cnt = mapper.delete(board.getBno());
+		
+		int after = mapper.getList().size();
+		
+		assertEquals(before - 1, after);
+		assertEquals(cnt, 1);
+		
+		log.info("########################################");
+		System.out.println("????????????????????????");
+		log.info("delete count: " + cnt);
+	}
+	
+	@Test
+	public void testUpdate() {
+		BoardVO board = new BoardVO();
+		board.setTitle("its me");
+		board.setContent("hello");
+		board.setWriter("eunji");
+		
+		mapper.insertSelectKey(board);
+		
+		board.setTitle("new title");
+		board.setContent("new content");
+		int cnt = mapper.update(board);
+		
+		BoardVO updateVO = mapper.read(board.getBno());
+		
+		assertEquals(updateVO.getTitle(), "new title");
+		assertEquals(updateVO.getContent(), "new content");
+		assertEquals(cnt, 1);
+		log.info("cnt: "+cnt);
 	}
 }
