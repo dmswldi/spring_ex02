@@ -5,7 +5,8 @@
 <mapper namespace="org.zerock.mapper.BoardMapper"> <!-- interface -->
   <select id="getList" resultType="org.zerock.domain.BoardVO"> <!-- id는 interface의 method명 -->
   <![CDATA[
-    SELECT * FROM tbl_board WHERE bno > 0
+    SELECT * FROM tbl_board WHERE bno > 0 
+    ORDER BY bno DESC
   ]]>
   </select>
   <!-- 꺽새 태그 오해 금지! -->
