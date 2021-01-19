@@ -7,8 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -28,13 +31,25 @@ public class BoardController {
 	}*/
 	
 	//@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@GetMapping("/list")
+/*	@GetMapping("/list")
 	public void list(Model model) {
 		// handler methodÀÇ return typeÀÌ void¸é ¿äÃ» °æ·Î°¡ °ð view(jsp) °æ·Î!!
 		// /board/list.jsp
 		log.info("************** list **************");
-		//List<BoardVO> list = service.getList();
-		//model.addAttribute("list", list);// disaptcherServletÀÌ ¸ðµ¨ °ü¸®, jspÇÑÅ× ³Ñ°ÜÁÜ
+		List<BoardVO> list = service.getList();
+		model.addAttribute("list", list);// disaptcherServletÀÌ ¸ðµ¨ °ü¸®, jspÇÑÅ× ³Ñ°ÜÁÜ
+	}
+*/
+	@GetMapping("/list")
+	public void list(Criteria criteria, Model model) {		
+		List<BoardVO> list = service.getList(criteria);
+		
+		int total = service.getTotal(criteria);
+		
+		PageDTO dto = new PageDTO(criteria, total);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pageMaker", dto);
 	}
 	
 	@GetMapping("/register")
@@ -93,7 +108,7 @@ public class BoardController {
 
 	@GetMapping("/remove")
 	@PostMapping("/remove")
-	public String remove(Long bno, RedirectAttributes rttr) {// @RequestParam("bno") ï¿½ï¿½ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+	public String remove(Long bno, RedirectAttributes rttr) {// @RequestParam("bno")
 		if(service.remove(bno)) {
 			rttr.addFlashAttribute("result", "success");
 		}

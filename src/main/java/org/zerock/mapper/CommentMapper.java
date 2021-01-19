@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.zerock.domain.CommentVO;
 
-public interface CommentMapper {// mybatis가 구현 클래스 만들고 xml 읽어서 쿼리 실행해줌 
+public interface CommentMapper {// mybatis ��¼��...
 
 	public List<CommentVO> getList();
 

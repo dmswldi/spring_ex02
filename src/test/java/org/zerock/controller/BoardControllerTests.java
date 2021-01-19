@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -76,7 +77,7 @@ public class BoardControllerTests {
 		assertTrue(o instanceof List);
 		assertNotEquals(((List) o).size(), 0);
 	}
-	
+	/*
 	@Test
 	public void testRegister() throws Exception {
 		int before = mapper.getList().size();
@@ -140,7 +141,7 @@ public class BoardControllerTests {
 		assertEquals("success", map.get("result"));
 		assertEquals("redirect:/board/list", viewName);
 	}
-
+*/
 	@Test
 	public void testRemove() throws Exception {
 		BoardVO board = new BoardVO();
@@ -153,10 +154,14 @@ public class BoardControllerTests {
 		Long key = board.getBno();
 		
 		int before = mapper.getList().size();
-		
+		/*
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
 				.param("bno", key + ""))
+		.andReturn();*/
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/remove")
+				.param("bno", key + ""))
 		.andReturn();
+		
 		
 		int after= mapper.getList().size();
 		
@@ -168,5 +173,18 @@ public class BoardControllerTests {
 		
 		assertEquals("success", result.getFlashMap().get("result"));
 		
+	}
+	
+	@Test
+	public void testListPaging() throws Exception {
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/list")
+				.param("pageNum", "2")
+				.param("amount", "10"))
+		.andReturn();
+		
+		Map<String, Object> model = result.getModelAndView().getModel();
+		List list = (List) model.get("list");
+		
+		assertEquals(10, list.size());
 	}
 }
