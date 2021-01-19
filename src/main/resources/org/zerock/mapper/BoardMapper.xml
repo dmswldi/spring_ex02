@@ -25,7 +25,7 @@
 	          tbl_board
 	  )
 	  WHERE
-	  	  rn BETWEEN (#{pageNum} -1) * #{amount} + 1 AND #{pageNum} * #{amount};
+	  	  rn BETWEEN (#{pageNum} -1) * #{amount} + 1 AND #{pageNum} * #{amount}
   ]]>
   </select>
   

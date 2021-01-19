@@ -42,3 +42,17 @@ VALUES (seq_comment.nextval, 1, 'eunjiya anyoung', 'yun', sysdate, sysdate);
 
 SELECT * FROM tbl_comment;
 commit;
+
+
+SELECT 
+	bno, title, content, writer, regdate, updatedate
+FROM
+(
+    SELECT 
+        ROW_NUMBER() OVER (ORDER BY bno DESC) rn,
+        bno, title, content, writer, regdate, updatedate
+    FROM 
+        tbl_board
+)
+WHERE
+	rn BETWEEN 1 AND 10;
