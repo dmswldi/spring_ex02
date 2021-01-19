@@ -33,8 +33,8 @@ public class BoardController {
 		// handler method의 return type이 void면 요청 경로가 곧 view(jsp) 경로!!
 		// /board/list.jsp
 		log.info("************** list **************");
-		List<BoardVO> list = service.getList();
-		model.addAttribute("list", list);// disaptcherServlet이 모델 관리, jsp한테 넘겨줌
+		//List<BoardVO> list = service.getList();
+		//model.addAttribute("list", list);// disaptcherServlet이 모델 관리, jsp한테 넘겨줌
 	}
 	
 	@GetMapping("/register")

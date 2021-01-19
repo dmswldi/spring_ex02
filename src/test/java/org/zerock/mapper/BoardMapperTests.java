@@ -67,7 +67,7 @@ public class BoardMapperTests {
 	}
 	
 	@Test
-	public void testRead() {// 留덉�留� @Test遺��꽣 �떎�뻾�릺�꽕
+	public void testRead() {
 		BoardVO board = new BoardVO();
 		board.setTitle("its me3");
 		board.setContent("hello3");
