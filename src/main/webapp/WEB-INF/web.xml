@@ -44,6 +44,6 @@
 	
 	<filter-mapping>
 		<filter-name>encoding</filter-name>
-		<servlet-name>appServlet</servlet-name>
+		<servlet-name>appServlet</servlet-name> <!-- dispacherServlet 요청 가기 전 filter 실행 -->
 	</filter-mapping>
 </web-app>

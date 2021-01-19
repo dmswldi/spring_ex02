@@ -14,7 +14,7 @@ import org.zerock.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-@Controller // @Component ï¿½ï¿½ï¿½ï¿½, springï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ bean
+@Controller // @Component Æ÷ÇÔ, springÀÌ °ü¸®ÇÏ´Â bean
 @AllArgsConstructor
 @RequestMapping("/board/*")
 @Log4j
@@ -30,11 +30,11 @@ public class BoardController {
 	//@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@GetMapping("/list")
 	public void list(Model model) {
-		// handler methodï¿½ï¿½ return typeï¿½ï¿½ voidï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ view(jsp) ï¿½ï¿½ï¿½!!
+		// handler methodÀÇ return typeÀÌ void¸é ¿äÃ» °æ·Î°¡ °ð view(jsp) °æ·Î!!
 		// /board/list.jsp
 		log.info("************** list **************");
 		List<BoardVO> list = service.getList();
-		model.addAttribute("list", list);// disaptcherServletï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, jspï¿½ï¿½ï¿½ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½
+		model.addAttribute("list", list);// disaptcherServletÀÌ ¸ðµ¨ °ü¸®, jspÇÑÅ× ³Ñ°ÜÁÜ
 	}
 	
 	@GetMapping("/register")
@@ -45,13 +45,13 @@ public class BoardController {
 	//@RequestMapping(value = "register", method = RequestMethod.POST)
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
-		// ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ RedirectAttributes
+		// ÇÑ ¹ø »ç¿ëÇÏ°í »ç¶óÁö´Â RedirectAttributes
 		/*
 		 BoardVO board = new BoardVO();
 		 board.setTitle(request.getParameter("title"); 
 		 board.setContent(request.getParameter("content"); 
 		 board.setWriter(request.getParameter("writer"); 
-		 -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½
+		 -> ½ºÇÁ¸µÀÌ ´ë½Å ÇØÁØ´Ù
 		 */
 		
 		service.register(board);
@@ -61,41 +61,34 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping({"/get", "/modify"})
-	public void get(Long bno, Model model) {// @RequestParam("bno") ï¿½ï¿½ï¿½ï¿½
-		// log.info("*************** get ***********");
-		// log.info("**************** bno: " + bno);
+	@GetMapping("/get")
+	public void get(Long bno, Model model) {// @RequestParam("bno") »ý·«
+		log.info("*************** get ***********");
+		log.info("**************** bno: " + bno);
 		BoardVO vo = service.get(bno);
 		model.addAttribute("board", vo);
 	}
 	
-	/* í•˜ëŠ” ì¼ get()ê³¼ ì¤‘ë³µ
-	@GetMapping("/modify")
-	public void modify(Long bno, Model model) {// return ê°’ ë‹¤ë¥´ê²Œ overload
-		BoardVO vo = service.get(bno);
-		model.addAttribute("board", vo);
-	}*/
-
 	@PostMapping("/modify")
-	public String modify(BoardVO board, RedirectAttributes rttr) {// ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½: dispatcherServletï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ set Ã³ï¿½ï¿½
+	public String modify(BoardVO board, RedirectAttributes rttr) {// ÆÄ¶ó¹ÌÅÍ ¸í½Ã: dispatcherServletÀÌ ÆÄ¶ó¹ÌÅÍ ¹Þ¾Æ¼­ set Ã³¸®
 		if(service.modify(board)) {
-			rttr.addFlashAttribute("result" ,"success");
+			rttr.addFlashAttribute("result" ,"success");		
 		}
-		return "redirect:/board/list";// modelï¿½ï¿½ ï¿½Æ´ï¿½ redirectAttributeï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½Ñ°Ü¾ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! (????)
+		return "redirect:/board/list";// modelÀÌ ¾Æ´Ñ redirectAttribute¿¡ ºÙ¿©¼­ ³Ñ°Ü¾ß ¾È ¾ø¾îÁü! (????)
 	}
 	
 	@PostMapping("/modify2")
 	public String modify2(BoardVO board, RedirectAttributes rttr) {
 		if(service.modify(board)) {
-			rttr.addFlashAttribute("result" ,"success");// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½×·ï¿½ ï¿½ï¿½ ï¿½ï¿½ð¿¡¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¾ï¿½? jsp ï¿½Æ´Ï¾ï¿½??
-			rttr.addAttribute("bno", board.getBno());// addAttribute()ï¿½ï¿½ ï¿½Í¸ï¿½ query stringï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¨
-			//rttr.addAttribute("a", "aa");
-			//rttr.addFlashAttribute("b", "bb");// getï¿½ï¿½ï¿½ï¿½ ï¿½ê¸¦ ï¿½ï¿½ ï¿½Ð³ï¿½,,,
+			rttr.addFlashAttribute("result" ,"success");// ¾ê ¸»°í -> ±×·³ ¾ë ¾îµð¿¡¼­ ¾²´Â °Å¾ß? jsp ¾Æ´Ï¾ß??
+			rttr.addAttribute("bno", board.getBno());// addAttribute()ÇÑ °Í¸¸ query stringÀ¸·Î ³Ñ¾î°¨
+			rttr.addAttribute("a", "aa");
+			rttr.addFlashAttribute("b", "bb");// get¿¡¼­ ¾ê¸¦ ¸ø ÀÐ³×,,,
 			
-			// addFlashAttributeï¿½ï¿½ mapï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½?
+			// addFlashAttribute¸¦ map¿¡ ¸ð¾Æ¼­ ÇÑ ¹ø¿¡ º¸³½´Ù¸é?
 		}
-		return "redirect:/board/get";// modelï¿½ï¿½ ï¿½Æ´ï¿½ redirectAttributeï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½Ñ°Ü¾ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! (????)
-		// ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ bnoï¿½ï¿½ dispatcherServletï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ö³ï¿½? -> rttrï¿½ï¿½ ï¿½ï¿½Æ¾ï¿½ ï¿½Ñ´ï¿½!
+		return "redirect:/board/get";// modelÀÌ ¾Æ´Ñ redirectAttribute¿¡ ºÙ¿©¼­ ³Ñ°Ü¾ß ¾È ¾ø¾îÁü! (????)
+		// ³Ñ°ÜÁà¾ß ÇÏ´Â bnoµµ dispatcherServletÀÌ Ã³¸®ÇØÁÖ³ª? -> rttr¿¡ ´ã¾Æ¾ß ÇÑ´Ù!
 	}
 
 	@GetMapping("/remove")
