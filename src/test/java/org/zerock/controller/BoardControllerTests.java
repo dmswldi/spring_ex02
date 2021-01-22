@@ -28,7 +28,7 @@ import org.zerock.mapper.BoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
-@WebAppConfiguration // disaptcherServletÀÌ ÀÏÇÏµµ·Ï ¸í½Ã 
+@WebAppConfiguration // disaptcherServletì´ ì¼í•˜ë„ë¡ ëª…ì‹œ 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
 		{"file:src/main/webapp/WEB-INF/spring/root-context.xml",
@@ -42,9 +42,9 @@ public class BoardControllerTests {
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;
 	
-	private MockMvc mockMvc;// °¡Â¥ mvc, ¼­¹ö ½ÇÇàÇÏÁö ¾Ê°í !
+	private MockMvc mockMvc;// ê°€ì§œ mvc, ì„œë²„ ì‹¤í–‰í•˜ì§€ ì•Šê³  !
 	
-	@org.junit.Before // ´Ù¸¥ ¸Ş¼Òµå ½ÇÇà ÀÌÀü¿¡ ½ÇÇàµÊ 
+	@org.junit.Before // ë‹¤ë¥¸ ë©”ì†Œë“œ ì‹¤í–‰ ì´ì „ì— ì‹¤í–‰ë¨ 
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
@@ -57,9 +57,9 @@ public class BoardControllerTests {
 	
 	@Test
 	public void testList() throws Exception {
-		// ÁÖ¼Ò ¿äÃ»ÇØ¼­ Å×½ºÆ®ÇÏ´Â ÀÛ¾÷ ´ë½ÅÇÔ
-		// url ¿äÃ» ½Ã request Http ¾îÂ¼°í¸¦ ¸¸µå´Âµ¥ ±× ÀÛ¾÷À» ÇØÁà¾ß ÇÔ
-		// .perform : dispatcherServletÇÑÅ× ÀÏ ½ÃÅ°±â
+		// ì£¼ì†Œ ìš”ì²­í•´ì„œ í…ŒìŠ¤íŠ¸í•˜ëŠ” ì‘ì—… ëŒ€ì‹ í•¨
+		// url ìš”ì²­ ì‹œ request Http ì–´ì©Œê³ ë¥¼ ë§Œë“œëŠ”ë° ê·¸ ì‘ì—…ì„ í•´ì¤˜ì•¼ í•¨
+		// .perform : dispatcherServletí•œí…Œ ì¼ ì‹œí‚¤ê¸°
 		/*
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/board/list"));
 		MvcResult rs = result.andReturn();
@@ -83,8 +83,8 @@ public class BoardControllerTests {
 		int before = mapper.getList().size();
 		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board/register")
-				.param("title", "Å×½ºÆ® Á¦¸ñ")
-				.param("content", "Å×½ºÆ® ³»¿ë")
+				.param("title", "í…ŒìŠ¤íŠ¸ ì œëª©")
+				.param("content", "í…ŒìŠ¤íŠ¸ ë‚´ìš©")
 				.param("writer", "user0"))
 		.andReturn();
 		
@@ -109,7 +109,7 @@ public class BoardControllerTests {
 		String viewName = result.getModelAndView().getViewName();
 		Map<String, Object> modelMap = result.getModelAndView().getModelMap();
 		
-		assertEquals("board/get", viewName);// ¿Ö ½½·¡½Ã ¾øÁö..!!
+		assertEquals("board/get", viewName);// ì™œ ìŠ¬ë˜ì‹œ ì—†ì§€..!!
 		assertNotNull(modelMap.get("board"));
 		assertEquals(new Long(1), ((BoardVO) modelMap.get("board")).getBno());
 	}
@@ -123,7 +123,7 @@ public class BoardControllerTests {
 		
 		mapper.insertSelectKey(board);
 		
-		Long key = board.getBno();// controller°¡ dispatcherServletÇÑÅ× model¿¡ °ª ´ã¾Æ¼­ ³Ñ°ÜÁØ´Ù
+		Long key = board.getBno();// controllerê°€ dispatcherServletí•œí…Œ modelì— ê°’ ë‹´ì•„ì„œ ë„˜ê²¨ì¤€ë‹¤
 		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board/modify")
 				.param("bno", key + "")
@@ -138,7 +138,7 @@ public class BoardControllerTests {
 		
 		assertEquals("ttt", mod.getTitle());
 		assertEquals("ccc", mod.getContent());
-		assertEquals("success", map.get("result"));
+		assertEquals("modSuccess", map.get("result"));
 		assertEquals("redirect:/board/list", viewName);
 	}
 */
@@ -154,18 +154,18 @@ public class BoardControllerTests {
 		Long key = board.getBno();
 		
 		int before = mapper.getList().size();
-		/*
+		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
 				.param("bno", key + ""))
-		.andReturn();*/
-		
+		.andReturn();
+		/*
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/remove")
 				.param("bno", key + ""))
 		.andReturn();
-		
+		*/
 		int after= mapper.getList().size();
 		
-		log.info("before: " + before + " / after: " + after + "*******");
+		log.warn("before: " + before + " / after: " + after + "*******");
 		
 		assertEquals(before - 1, after);
 		
@@ -173,7 +173,7 @@ public class BoardControllerTests {
 		
 		assertEquals("redirect:/board/list", viewName);
 		
-		assertEquals("success", result.getFlashMap().get("result"));
+		assertEquals("delSuccess", result.getFlashMap().get("result"));
 		
 	}
 	

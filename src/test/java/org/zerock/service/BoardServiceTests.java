@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class BoardServiceTests {
 	@Setter(onMethod_ = @Autowired)
-	private BoardService service;// dependency(BoardServiceImpl class) 二쇱엯
+	private BoardService service;// dependency(BoardServiceImpl class)
 	
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;

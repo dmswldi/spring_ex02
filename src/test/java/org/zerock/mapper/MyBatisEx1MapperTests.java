@@ -33,7 +33,7 @@ public class MyBatisEx1MapperTests {
 	@Test
 	public void testSelect1() {
 		Ex1Criteria cri = new Ex1Criteria();
-		cri.setBno(0);// �� �־ default 0
+		cri.setBno(0);// 안 넣어도 default 0
 		
 		mapper.select1(cri);
 	}

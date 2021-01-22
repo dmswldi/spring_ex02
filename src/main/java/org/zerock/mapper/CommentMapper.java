@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.zerock.domain.CommentVO;
 
-public interface CommentMapper {// mybatis ¾îÂ¼°í...
+public interface CommentMapper {// mybatis ì–´ì©Œê³ ...
 
 	public List<CommentVO> getList();
 

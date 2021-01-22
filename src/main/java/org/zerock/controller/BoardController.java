@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
@@ -18,7 +19,7 @@ import org.zerock.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-@Controller // @Component Æ÷ÇÔ, springÀÌ °ü¸®ÇÏ´Â bean
+@Controller // @Component í¬í•¨, springì´ ê´€ë¦¬í•˜ëŠ” bean
 @AllArgsConstructor
 @RequestMapping("/board/*")
 @Log4j
@@ -34,41 +35,41 @@ public class BoardController {
 	//@RequestMapping(value = "/list", method = RequestMethod.GET)
 /*	@GetMapping("/list")
 	public void list(Model model) {
-		// handler methodÀÇ return typeÀÌ void¸é ¿äÃ» °æ·Î°¡ °ğ view(jsp) °æ·Î!!
+		// handler methodì˜ return typeì´ voidë©´ ìš”ì²­ ê²½ë¡œê°€ ê³§ view(jsp) ê²½ë¡œ!!
 		// /board/list.jsp
 		log.info("************** list **************");
 		List<BoardVO> list = service.getList();
-		model.addAttribute("list", list);// disaptcherServletÀÌ ¸ğµ¨ °ü¸®, jspÇÑÅ× ³Ñ°ÜÁÜ
+		model.addAttribute("list", list);// disaptcherServletì´ ëª¨ë¸ ê´€ë¦¬, jspí•œí…Œ ë„˜ê²¨ì¤Œ
 	}
 */
 	@GetMapping("/list")
 	public void list(Criteria criteria, Model model) {		
-		List<BoardVO> list = service.getList(criteria);
+		List<BoardVO> list = service.getList(criteria);// ìµœëŒ€ 10ê°œ return : í•´ë‹¹ paginationì˜ ê²Œì‹œë¬¼ë§Œ ê°€ì ¸ì˜´
 		
 		int total = service.getTotal(criteria);
 		
 		PageDTO dto = new PageDTO(criteria, total);
 		
-		model.addAttribute("list", list);
+		model.addAttribute("list", list);// modelë¡œ ë„£ì€ ê°’ì„ jspì—ì„œ elë¡œ êº¼ë‚´ì“¸ ìˆ˜ ìˆìŒ
 		model.addAttribute("pageMaker", dto);
 	}
 	
 	@GetMapping("/register")
 	public void register(Criteria criteria) {// /board/register.jsp
-		// ¿Ö criteria ½áÁÖ´Â °Í¸¸À¸·Î ±Û¾²±â-> ¸ñ·ÏÀÌ ³Ñ¾î°¡Áö?
-		// model.addAttribute("criteria", crieteria) ÀÚµ¿
+		// ì™œ criteria ì¨ì£¼ëŠ” ê²ƒë§Œìœ¼ë¡œ ê¸€ì“°ê¸°-> ëª©ë¡ì´ ë„˜ì–´ê°€ì§€?
+		// model.addAttribute("criteria", crieteria) ìë™
 	}
 	
 	//@RequestMapping(value = "register", method = RequestMethod.POST)
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
-		// ÇÑ ¹ø »ç¿ëÇÏ°í »ç¶óÁö´Â RedirectAttributes
+		// í•œ ë²ˆ ì‚¬ìš©í•˜ê³  ì‚¬ë¼ì§€ëŠ” RedirectAttributes
 		/*
 		 BoardVO board = new BoardVO();
 		 board.setTitle(request.getParameter("title"); 
 		 board.setContent(request.getParameter("content"); 
 		 board.setWriter(request.getParameter("writer"); 
-		 -> ½ºÇÁ¸µÀÌ ´ë½Å ÇØÁØ´Ù
+		 -> ìŠ¤í”„ë§ì´ ëŒ€ì‹  í•´ì¤€ë‹¤
 		 */
 		
 		service.register(board);
@@ -78,16 +79,16 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping({"/get", "/modify"})
+	@GetMapping({"/get", "/modify", "/modify2"})
 	@PostMapping("/get")
-	public void get(Long bno, Criteria criteria, Model model) {// @RequestParam("bno"), @ModelAttribute("criteria") »ı·«
+	public void get(Long bno, Criteria criteria, Model model) {// @RequestParam("bno"), @ModelAttribute("criteria") ìƒëµ
 		// log.info("*************** get ***********");
 		// log.info("**************** bno: " + bno);
 		// log.info(criteria);
 		BoardVO vo = service.get(bno);
 		model.addAttribute("board", vo);
-		// model.addAttribute("criteria", criteria); -> annotationÀ¸·Î Ã³¸®
-		// --> param @ModelAttribute("criteria") Å¬·¡½º¸í µû¶ó ÀÚµ¿ model.add µÊ
+		// model.addAttribute("criteria", criteria); -> annotationìœ¼ë¡œ ì²˜ë¦¬
+		// --> param @ModelAttribute("criteria") í´ë˜ìŠ¤ëª… ë”°ë¼ ìë™ model.add ë¨
 	}
 	
 	/*
@@ -99,40 +100,48 @@ public class BoardController {
 	*/
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO board, Criteria criteria, RedirectAttributes rttr) {// ÆÄ¶ó¹ÌÅÍ ¸í½Ã: dispatcherServletÀÌ ÆÄ¶ó¹ÌÅÍ ¹Ş¾Æ¼­ set Ã³¸®
+	public String modify(BoardVO board, Criteria criteria, RedirectAttributes rttr) {// íŒŒë¼ë¯¸í„° ëª…ì‹œ: dispatcherServletì´ íŒŒë¼ë¯¸í„° ë°›ì•„ì„œ set ì²˜ë¦¬
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result" ,"modSuccess");		
 		}
-		// redirect ½Ã rttr¿¡ Criteria ³Ö¾îÁÖ±â
+		// redirect ì‹œ rttrì— Criteria ë„£ì–´ì£¼ê¸°
 		rttr.addAttribute("pageNum", criteria.getPageNum());
 		rttr.addAttribute("amount", criteria.getAmount());
 		
-		return "redirect:/board/list";// modelÀÌ ¾Æ´Ñ redirectAttribute¿¡ ºÙ¿©¼­ ³Ñ°Ü¾ß ¾È ¾ø¾îÁü! (????)
+		return "redirect:/board/list";// modelì´ ì•„ë‹Œ redirectAttributeì— ë¶™ì—¬ì„œ ë„˜ê²¨ì•¼ ì•ˆ ì—†ì–´ì§!
 	}
 	
 	@PostMapping("/modify2")
-	public String modify2(BoardVO board, RedirectAttributes rttr) {
+	public String modify2(BoardVO board, Criteria criteria, RedirectAttributes rttr) {
 		if(service.modify(board)) {
-			rttr.addFlashAttribute("result" ,"success");// ¾ê ¸»°í -> ±×·³ ¾ë ¾îµğ¿¡¼­ ¾²´Â °Å¾ß? jsp ¾Æ´Ï¾ß??
-			rttr.addAttribute("bno", board.getBno());// addAttribute()ÇÑ °Í¸¸ query stringÀ¸·Î ³Ñ¾î°¨
-			rttr.addAttribute("a", "aa");
-			rttr.addFlashAttribute("b", "bb");// get¿¡¼­ ¾ê¸¦ ¸ø ÀĞ³×,,,
+			rttr.addFlashAttribute("result" ,"modSuccess");
+			rttr.addAttribute("bno", board.getBno());// addAttribute()í•œ ê²ƒë§Œ query stringìœ¼ë¡œ ë„˜ì–´ê°
+			//rttr.addAttribute("a", "aa");
+			//rttr.addFlashAttribute("b", "bb");// getì—ì„œ ì–˜ë¥¼ ëª» ì½ë„¤,,,
 			
-			// addFlashAttribute¸¦ map¿¡ ¸ğ¾Æ¼­ ÇÑ ¹ø¿¡ º¸³½´Ù¸é?
+			// addFlashAttributeë¥¼ mapì— ëª¨ì•„ì„œ í•œ ë²ˆì— ë³´ë‚¸ë‹¤ë©´?
+			
+			rttr.addAttribute("type", criteria.getType());
+			rttr.addAttribute("keyword", criteria.getKeyword());
+			rttr.addAttribute("pageNum", criteria.getPageNum());
+			rttr.addAttribute("amount", criteria.getAmount());
 		}
 		
-		return "redirect:/board/get";// modelÀÌ ¾Æ´Ñ redirectAttribute¿¡ ºÙ¿©¼­ ³Ñ°Ü¾ß ¾È ¾ø¾îÁü! (????)
-		// ³Ñ°ÜÁà¾ß ÇÏ´Â bnoµµ dispatcherServletÀÌ Ã³¸®ÇØÁÖ³ª? -> rttr¿¡ ´ã¾Æ¾ß ÇÑ´Ù!
+		return "redirect:/board/get";// modelì´ ì•„ë‹Œ redirectAttributeì— ë¶™ì—¬ì„œ ë„˜ê²¨ì•¼ ì•ˆ ì—†ì–´ì§! (????)
+		// ë„˜ê²¨ì¤˜ì•¼ í•˜ëŠ” bnoë„ dispatcherServletì´ ì²˜ë¦¬í•´ì£¼ë‚˜? -> rttrì— ë‹´ì•„ì•¼ í•œë‹¤!
 	}
 
-	@GetMapping("/remove")
-	@PostMapping("/remove")// À§¿¡ ºÙÀº °Í¸¸ test µÇ³×...?
+//	@GetMapping("/remove")
+//	@PostMapping("/remove")
+	@RequestMapping(path = "/remove", method = {RequestMethod.GET, RequestMethod.POST})
 	public String remove(Long bno, Criteria criteria, RedirectAttributes rttr) {// @RequestParam("bno")
 		if(service.remove(bno)) {
 			rttr.addFlashAttribute("result", "delSuccess");
 		}
 		
-		// redirect ½Ã rttr¿¡ Criteria ³Ö¾îÁÖ±â
+		// redirect ì‹œ rttrì— Criteria ë„£ì–´ì£¼ê¸°
+		rttr.addAttribute("type", criteria.getType());
+		rttr.addAttribute("keyword", criteria.getKeyword());
 		rttr.addAttribute("pageNum", criteria.getPageNum());
 		rttr.addAttribute("amount", criteria.getAmount());
 			

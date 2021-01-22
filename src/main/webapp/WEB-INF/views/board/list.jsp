@@ -81,9 +81,11 @@ table {
             <td>${board.bno}</td>
             <td class="title">
             	<c:url value="/board/get" var="boardLink">
-            		<c:param value="${board.bno }" name="bno" />
-            		<c:param value="${pageMaker.criteria.pageNum }" name="pageNum" />
-            		<c:param value="${pageMaker.criteria.amount }" name="amount" />
+            		<c:param name="bno" value="${board.bno }" />
+            		<c:param name="type" value="${pageMaker.criteria.type }"/>
+		    		<c:param name="keyword" value="${pageMaker.criteria.keyword }"/>
+            		<c:param name="pageNum" value="${pageMaker.criteria.pageNum }" />
+            		<c:param name="amount" value="${pageMaker.criteria.amount }" />
             	</c:url>
             	<a href="${boardLink }"><i><c:out value="${board.title}" /></i></a>
             </td>
@@ -122,8 +124,10 @@ table {
 	  <ul class="pagination">
 	  	<c:if test="${pageMaker.prev }">
 	  		<c:url value="/board/list" var="prevLink"> <%-- contextRoot 생략 O --%>
-	  			<c:param value="${pageMaker.startPage-1}" name="pageNum" />
-	  			<c:param value="${pageMaker.criteria.amount}" name="amount" />
+	  			<c:param name="type" value="${pageMaker.criteria.type }"/>
+		    	<c:param name="keyword" value="${pageMaker.criteria.keyword }"/>
+	  			<c:param name="pageNum" value="${pageMaker.startPage-1}" />
+	  			<c:param name="amount" value="${pageMaker.criteria.amount}" />
 	  		</c:url>
 		    <li class="page-item">
  		      <a class="page-link" href="${prevLink }">Previous</a>
@@ -132,6 +136,8 @@ table {
 	  	</c:if>
 	    <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
 		    <c:url value="/board/list" var="pageLink">
+		    	<c:param name="type" value="${pageMaker.criteria.type }"/>
+		    	<c:param name="keyword" value="${pageMaker.criteria.keyword }"/>
 		    	<c:param name="pageNum" value="${num }"/>
 		    	<c:param name="amount" value="${pageMaker.criteria.amount}"/>
 		    </c:url>
@@ -142,8 +148,10 @@ table {
 	    </c:forEach>
 		<c:if test="${pageMaker.next }">
 			<c:url value="/board/list" var="nextLink">
-	  			<c:param value="${pageMaker.endPage+1}" name="pageNum" />
-	  			<c:param value="${pageMaker.criteria.amount}" name="amount" />
+				<c:param name="type" value="${pageMaker.criteria.type }"/>
+		    	<c:param name="keyword" value="${pageMaker.criteria.keyword }"/>
+	  			<c:param name="pageNum" value="${pageMaker.endPage+1}" />
+	  			<c:param name="amount" value="${pageMaker.criteria.amount}" />
 	  		</c:url>
 		    <li class="page-item">
  		      <a class="page-link" href="${nextLink }">Next</a>
@@ -157,6 +165,8 @@ table {
 
 <div class="d-none">
 	<form id="actionForm" action="${root }/board/list">
+		<input name="type" value="${pageMaker.criteria.type }" />
+		<input name="keyword" value="${pageMaker.criteria.keyword }" />
 		<input name="pageNum" value="${pageMaker.criteria.pageNum }" /> <%-- href의 값 --%>
 		<input name="amount" value="${pageMaker.criteria.amount }" />
 		<input type="submit" />

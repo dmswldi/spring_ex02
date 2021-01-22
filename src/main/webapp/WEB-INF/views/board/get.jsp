@@ -48,23 +48,29 @@
 					class="form-control" id="writer" readonly>
 			</div>
 			
-			<c:url value="/board/modify" var="modifyLink">
-				<c:param value="${board.bno }" name="bno" />
-				<c:param value="${criteria.pageNum }" name="pageNum" />      	
-				<c:param value="${criteria.amount }" name="amount" />      	
+			<c:url value="/board/modify2" var="modifyLink">
+				<c:param name="bno" value="${board.bno }" />
+				<c:param name="type" value="${criteria.type }"/>
+		    	<c:param name="keyword" value="${criteria.keyword }"/>
+				<c:param name="pageNum" value="${criteria.pageNum }" />      	
+				<c:param name="amount" value="${criteria.amount }" />      	
 	      	</c:url>
 			<a href="${modifyLink }" class="btn btn-default">수정</a>
 			
 			<c:url value="/board/remove" var="removeLink">
-				<c:param value="${board.bno }" name="bno" />
-				<c:param value="${criteria.pageNum }" name="pageNum" />      	
-				<c:param value="${criteria.amount }" name="amount" />      	
+				<c:param name="bno" value="${board.bno }" />
+				<c:param name="type" value="${criteria.type }"/>
+		    	<c:param name="keyword" value="${criteria.keyword }"/>
+				<c:param name="pageNum" value="${criteria.pageNum }" />      	
+				<c:param name="amount" value="${criteria.amount }" />      	
 	      	</c:url>
 			<a href="${removeLink }" class="btn btn-secondary">삭제</a>
 			
 			<c:url value="/board/list" var="listLink">
-				<c:param value="${criteria.pageNum }" name="pageNum" />      	
-				<c:param value="${criteria.amount }" name="amount" />      	
+				<c:param name="type" value="${criteria.type }"/>
+		    	<c:param name="keyword" value="${criteria.keyword }"/>
+				<c:param name="pageNum" value="${criteria.pageNum }" />      	
+				<c:param name="amount" value="${criteria.amount }" />      	
 	      	</c:url>
 			<a href="${listLink }" class="btn btn-primary float-right">목록</a>
 		</div>

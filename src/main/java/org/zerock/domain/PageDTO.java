@@ -20,11 +20,11 @@ public class PageDTO {
 		this.criteria = criteria;
 		this.total = total;
 
-		/* pagination 1-5 (5°³ ÆäÀÌÁö¾¿ º¸ÀÌ°Ô) */
+		/* pagination 1-5 (5ê°œ í˜ì´ì§€ì”© ë³´ì´ê²Œ) */
 		this.endPage = (int) Math.ceil(criteria.getPageNum() / 5.0) * 5;
 		this.startPage = endPage - 4;
 		
-		int realEnd = (int) Math.ceil(total * 1.0 / criteria.getAmount());// ¸Ç ³¡ ÆäÀÌÁö
+		int realEnd = (int) Math.ceil(total * 1.0 / criteria.getAmount());// ë§¨ ë í˜ì´ì§€
 		
 		this.endPage = Math.min(realEnd, endPage);
 		
@@ -32,7 +32,7 @@ public class PageDTO {
 		this.next = endPage < realEnd;
 		
 		
-		/* pagination 1-10 (10°³ ÆäÀÌÁö¾¿ º¸ÀÌ°Ô) 
+		/* pagination 1-10 (10ê°œ í˜ì´ì§€ì”© ë³´ì´ê²Œ) 
 		this.endPage = (int) Math.ceil(criteria.getPageNum() / 10.0) * 10;
 		this.startPage = endPage - 9;
 		

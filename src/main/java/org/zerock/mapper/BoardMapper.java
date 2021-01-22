@@ -9,7 +9,7 @@ public interface BoardMapper {
 	
 	public int getTotalCount(Criteria criteria);
 	
-	//@Select("SELECT * FROM tbl_board WHERE bno > 0") // or BoardMapper.xml�뿉 �옉�꽦
+	//@Select("SELECT * FROM tbl_board WHERE bno > 0") // or BoardMapper.xml
 	public List<BoardVO> getList();
 	
 	public List<BoardVO> getListWithPaging(Criteria criteria	);

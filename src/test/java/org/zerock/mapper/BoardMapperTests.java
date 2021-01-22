@@ -26,6 +26,34 @@ public class BoardMapperTests {
 	private BoardMapper mapper;
 	
 	@Test
+	public void testSearch1() {// WHERE절 붙을 때 (조건에 따른 paging)
+		Criteria criteria = new Criteria();
+		criteria.setType("T");
+		criteria.setKeyword("test");
+		
+		mapper.getListWithPaging(criteria);
+	}
+	
+	@Test
+	public void testSearch2() {// WHERE절 붙을 때 (조건에 따른 paging)
+		Criteria criteria = new Criteria();
+		criteria.setType("C");
+		criteria.setKeyword("content");
+		
+		mapper.getListWithPaging(criteria);
+	}
+	
+	@Test
+	public void testSearch3() {// WHERE절 붙을 때 (조건에 따른 paging)
+		Criteria criteria = new Criteria();
+		criteria.setType("TW");
+		criteria.setKeyword("what");
+		// T or W가 what인 것 검색
+		
+		mapper.getListWithPaging(criteria);
+	}
+	
+	@Test
 	public void testGetList() {
 		List<BoardVO> list = mapper.getList();
 		
@@ -127,7 +155,7 @@ public class BoardMapperTests {
 	}
 	
 	@Test
-	public void testPaging() {
+	public void testPaging() {// WHERE절 안 붙을 때
 		Criteria criteria = new Criteria(1, 5);// 1페이지, 페이지당 5 게시물
 		List<BoardVO> list = mapper.getListWithPaging(criteria);
 		
