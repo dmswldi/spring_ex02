@@ -16,6 +16,7 @@
 		<property name="username" value="admin"></property>
 <!-- 		<property name="password" value="admin"></property>  setPassword("admin")과 같음 -->
 		<property name="password" value="Pizzastore10004"></property>
+		<property name="maximumPoolSize" value="2"></property>
 	</bean>
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"> <!-- DBCP, 빈 사라질 때 close() -->
 		<constructor-arg ref="hikariConfig"></constructor-arg>

@@ -48,9 +48,25 @@
 					class="form-control" id="writer" readonly>
 			</div>
 			
-			<a href="${root }/board/modify?bno=${board.bno}" class="btn btn-default">수정</a>
-			<a href="${root }/board/remove?bno=${board.bno}" class="btn btn-secondary">삭제</a>
-			<a href="${root }/board/list" class="btn btn-primary float-right">목록</a>
+			<c:url value="/board/modify" var="modifyLink">
+				<c:param value="${board.bno }" name="bno" />
+				<c:param value="${criteria.pageNum }" name="pageNum" />      	
+				<c:param value="${criteria.amount }" name="amount" />      	
+	      	</c:url>
+			<a href="${modifyLink }" class="btn btn-default">수정</a>
+			
+			<c:url value="/board/remove" var="removeLink">
+				<c:param value="${board.bno }" name="bno" />
+				<c:param value="${criteria.pageNum }" name="pageNum" />      	
+				<c:param value="${criteria.amount }" name="amount" />      	
+	      	</c:url>
+			<a href="${removeLink }" class="btn btn-secondary">삭제</a>
+			
+			<c:url value="/board/list" var="listLink">
+				<c:param value="${criteria.pageNum }" name="pageNum" />      	
+				<c:param value="${criteria.amount }" name="amount" />      	
+	      	</c:url>
+			<a href="${listLink }" class="btn btn-primary float-right">목록</a>
 		</div>
 	</div>
 </div>

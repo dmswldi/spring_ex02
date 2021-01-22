@@ -158,12 +158,14 @@ public class BoardControllerTests {
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
 				.param("bno", key + ""))
 		.andReturn();*/
+		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/remove")
 				.param("bno", key + ""))
 		.andReturn();
 		
-		
 		int after= mapper.getList().size();
+		
+		log.info("before: " + before + " / after: " + after + "*******");
 		
 		assertEquals(before - 1, after);
 		

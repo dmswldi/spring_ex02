@@ -1,4 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <nav class="navbar navbar-expand-lg  navbar-dark bg-dark container-sm mb-3">
   <a class="navbar-brand" href="#">게시판</a>
@@ -9,10 +10,18 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="${root }/board/list">목록 <span class="sr-only">(current)</span></a>
+      	<c:url value="/board/list" var="listLink">
+			<c:param value="${criteria.pageNum }" name="pageNum" />      	
+			<c:param value="${criteria.amount }" name="amount" />      	
+      	</c:url>
+        <a class="nav-link" href="${listLink }">목록 <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${root }/board/register">글쓰기</a>
+      	<c:url value="/board/register" var="registerLink">
+			<c:param value="${criteria.pageNum }" name="pageNum" />      	
+			<c:param value="${criteria.amount }" name="amount" />      	
+      	</c:url>
+        <a class="nav-link" href="${registerLink }">글쓰기</a>
       </li>
     </ul>
   </div>

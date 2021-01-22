@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,8 +54,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("/register")
-	public void register() {// /board/register.jsp
-		
+	public void register(Criteria criteria) {// /board/register.jsp
+		// 왜 criteria 써주는 것만으로 글쓰기-> 목록이 넘어가지?
+		// model.addAttribute("criteria", crieteria) 자동
 	}
 	
 	//@RequestMapping(value = "register", method = RequestMethod.POST)
@@ -76,19 +78,35 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping("/get")
-	public void get(Long bno, Model model) {// @RequestParam("bno") 생략
-		log.info("*************** get ***********");
-		log.info("**************** bno: " + bno);
+	@GetMapping({"/get", "/modify"})
+	@PostMapping("/get")
+	public void get(Long bno, Criteria criteria, Model model) {// @RequestParam("bno"), @ModelAttribute("criteria") 생략
+		// log.info("*************** get ***********");
+		// log.info("**************** bno: " + bno);
+		// log.info(criteria);
+		BoardVO vo = service.get(bno);
+		model.addAttribute("board", vo);
+		// model.addAttribute("criteria", criteria); -> annotation으로 처리
+		// --> param @ModelAttribute("criteria") 클래스명 따라 자동 model.add 됨
+	}
+	
+	/*
+	@GetMapping("/modify")
+	public void modify(Long bno, Model model) {
 		BoardVO vo = service.get(bno);
 		model.addAttribute("board", vo);
 	}
+	*/
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO board, RedirectAttributes rttr) {// 파라미터 명시: dispatcherServlet이 파라미터 받아서 set 처리
+	public String modify(BoardVO board, Criteria criteria, RedirectAttributes rttr) {// 파라미터 명시: dispatcherServlet이 파라미터 받아서 set 처리
 		if(service.modify(board)) {
-			rttr.addFlashAttribute("result" ,"success");		
+			rttr.addFlashAttribute("result" ,"modSuccess");		
 		}
+		// redirect 시 rttr에 Criteria 넣어주기
+		rttr.addAttribute("pageNum", criteria.getPageNum());
+		rttr.addAttribute("amount", criteria.getAmount());
+		
 		return "redirect:/board/list";// model이 아닌 redirectAttribute에 붙여서 넘겨야 안 없어짐! (????)
 	}
 	
@@ -102,16 +120,22 @@ public class BoardController {
 			
 			// addFlashAttribute를 map에 모아서 한 번에 보낸다면?
 		}
+		
 		return "redirect:/board/get";// model이 아닌 redirectAttribute에 붙여서 넘겨야 안 없어짐! (????)
 		// 넘겨줘야 하는 bno도 dispatcherServlet이 처리해주나? -> rttr에 담아야 한다!
 	}
 
 	@GetMapping("/remove")
-	@PostMapping("/remove")
-	public String remove(Long bno, RedirectAttributes rttr) {// @RequestParam("bno")
+	@PostMapping("/remove")// 위에 붙은 것만 test 되네...?
+	public String remove(Long bno, Criteria criteria, RedirectAttributes rttr) {// @RequestParam("bno")
 		if(service.remove(bno)) {
-			rttr.addFlashAttribute("result", "success");
+			rttr.addFlashAttribute("result", "delSuccess");
 		}
+		
+		// redirect 시 rttr에 Criteria 넣어주기
+		rttr.addAttribute("pageNum", criteria.getPageNum());
+		rttr.addAttribute("amount", criteria.getAmount());
+			
 		return "redirect:/board/list";
 	}
 	

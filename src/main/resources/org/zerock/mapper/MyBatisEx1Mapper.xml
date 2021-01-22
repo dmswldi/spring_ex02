@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.MyBatisEx1Mapper"> <!-- interface -->
+  <select id="select1" resultType="int">
+  <![CDATA[
+  	SELECT * FROM tbl_board
+  ]]>
+  	<if test="bno != 0"> <!-- cri의 조건 -->
+  		WHERE bno = #{bno}
+  	</if>
+  </select>
+  
+  <select id="select2" resultType="int">
+  	SELECT * FROM tbl_board
+  	<if test="type == 'title'"> <!-- cri.getType() == 'title' -->
+  		WHERE title = #{keyword} <!-- cri.getKeyword() -->
+  	</if>
+  	<if test="type == 'content'"> <!-- sql 겉에 "" 큰따옴표 써야함 -->
+  		WHERE content = #{keyword} 
+  	</if>
+  	<if test="type eq 'writer'">
+  		WHERE writer = #{keyword}
+  	</if>
+  </select>
+  
+  <select id="select3" resultType="int">
+  	SELECT * FROM tbl_board
+  	<if test="type == 'T'.toString()"> <!-- 'T' 하나만 있으면 캐릭터로 인식 -> toString() 쓰기 -->
+  		WHERE title LIKE '%' || #{keyword} || '%'
+  	</if>
+  	<if test="type == 'C'.toString()">
+  		WHERE content LIKE '%' || #{keyword} || '%'
+  	</if>
+  	<if test="type == 'W'.toString()">
+  		WHERE writer LIKE '%' || #{keyword} || '%'
+  	</if>
+  </select>
+  
+  <select id="select4" resultType="int">
+  	SELECT * FROM tbl_board
+  	WHERE
+  	<choose>
+  		<when test="type == 'title'">
+  			title LIKE '%' || #{keyword} || '%'
+  		</when>
+  		<when test="type == 'content'">
+  			title LIKE '%' || #{keyword} || '%'
+  		</when>
+  		<when test="type == 'writer'">
+  			title LIKE '%' || #{keyword} || '%'
+  		</when>
+  		<otherwise>
+  			bno > 0
+  		</otherwise>
+  	</choose>
+  </select>
+  
+  <select id="select5" resultType="int">
+  	SELECT * FROM tbl_board
+  	<where> <!-- 조건에 따른 where 추가 or not -->
+	  	<choose>
+	  		<when test="type == 'title'">
+	  			title = #{keyword}
+	  		</when>
+	  		<when test="type == 'content'">
+	  			title = #{keyword}
+	  		</when>
+	  	</choose>
+  	</where>
+  </select>
+  
+  <select id="select6" resultType="int">
+  	SELECT * FROM tbl_board
+  	<foreach item="myitem" collection="mylist"> <!-- getMylist() -->
+  		#{myitem}, 
+  	</foreach>
+  </select>
+  
+  <select id="select7" resultType="int">
+  	SELECT * FROM tbl_board
+  	<foreach item="myval" index="myidx" collection="map"> <!-- item: value, index: key -->
+  		(#{myidx}, #{myval}) , 
+  	</foreach>
+  </select>
+  
+  <select id="select8" resultType="int">
+  	SELECT * FROM tbl_board
+  	<foreach item="item" collection="mylist">
+  		<trim suffix="AND"> <!-- suffix | prefix -->
+  			#{item}
+  		</trim>
+  	</foreach>
+  </select>
+  
+  <select id="select9" resultType="int">
+  	SELECT * FROM tbl_board
+  	<trim suffixOverrides="AND"> <!-- 마지막 AND 삭제 -->
+	  	<foreach item="item" collection="mylist">
+	  		<trim suffix="AND"> <!-- suffix | prefix -->
+	  			#{item}
+	  		</trim>
+	  	</foreach>
+  	</trim>
+  </select>
+</mapper>

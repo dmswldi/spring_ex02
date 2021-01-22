@@ -14,18 +14,21 @@
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script>
 $(function(){
-	var registerd = '${result }';/* '' 처리 */
+	var result = '${result }';/* '' 처리 */
 	
-	checkModal(registerd);
+	checkModal(result);
 
 	history.replaceState({}, null, null);// 등록 후 뒤로 가기할 때 모달 show x (모달창 중복 띄우기 XX)
 	
-	function checkModal(registerd){
+	function checkModal(result){
 		if(!history.state){// state가 null일 때
-			if(registerd == 'success'){// registerd가 success일 때는 수정 
+			if(result == 'modSuccess'){// registerd가 success일 때는 수정 
 				$('#registerModal .modal-body p').html("게시글이 수정되었습니다.");
 				$('#registerModal').modal("show");// bootstrap method
-			} else if(registerd){/* null, ""도 false 처리됨 */
+			} else if(result == 'delSuccess'){
+				$('#registerModal .modal-body p').html("게시글이 삭제되었습니다.");
+				$('#registerModal').modal("show");
+			} else if(result){/* null, ""도 false 처리됨 */
 				$('#registerModal .modal-body p').html("게시글 " + registerd + "번이 등록되었습니다.");
 				$('#registerModal').modal("show");// bootstrap method
 			}
@@ -76,7 +79,14 @@ table {
         <c:forEach items="${list}" var="board" >
           <tr>
             <td>${board.bno}</td>
-            <td class="title"><a href="${root }/board/get?bno=${board.bno}"><i><c:out value="${board.title}" /></i></a></td>
+            <td class="title">
+            	<c:url value="/board/get" var="boardLink">
+            		<c:param value="${board.bno }" name="bno" />
+            		<c:param value="${pageMaker.criteria.pageNum }" name="pageNum" />
+            		<c:param value="${pageMaker.criteria.amount }" name="amount" />
+            	</c:url>
+            	<a href="${boardLink }"><i><c:out value="${board.title}" /></i></a>
+            </td>
             <td><c:out value="${board.writer}" /></td>
             <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}" /></td>
             <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedate}" /></td>

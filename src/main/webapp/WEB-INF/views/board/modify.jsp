@@ -19,6 +19,13 @@ $(function(){
 		$('#modify-form').attr('action', '${root}/board/remove');
 		$('#modify-form').submit();
 	});
+	
+	$('#cancel-btn').click(function(e){
+		e.preventDefault();
+		var bno = '${board.bno}';
+		$('#cancel-btn').attr('action', '${root}/board/get?bno=${bno}');
+		$('#cancel-btn').submit();
+	});
 });
 </script>
 <title>Insert title here</title>
@@ -58,9 +65,11 @@ $(function(){
 						class="form-control" id="writer" readonly>
 				</div>
 
+				<input hidden=true value="${criteria.pageNum }" name="pageNum" />
+				<input type="hidden" value="${criteria.amount }" name="amount" />
 				<button type="submit" class="btn btn-primary">등록</button>
-				<a href="${root }/board/get?bno=${board.bno}" class="btn btn-secondary">취소</a>
-				<button id="remove-btn" type="submit" class="btn btn-danger">삭제</button>
+				<button id="cancel-btn" type="submit" class="btn btn-secondary">취소</button>
+				<button id="remove-btn" type="submit" class="btn btn-danger float-right">삭제</button>
 			</form>
 		</div>
 	</div>
