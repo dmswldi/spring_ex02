@@ -1,5 +1,11 @@
 package org.zerock.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.Rest1;
@@ -69,7 +75,7 @@ public class RestControllerEx2 {
 	}
 	
 	@RequestMapping("/ex5")
-	public Rest2 method5() {
+	public Rest2 method5() {// object {}
 		log.info("method5");
 				
 		Rest1 r1 = new Rest1();
@@ -83,5 +89,71 @@ public class RestControllerEx2 {
 		
 		// String 변환 코드 생략, xml 표기 방법으로 표현됨
 		return r2;
+	}
+	
+	@RequestMapping("/ex6")
+	public String[] method6() {// ["", "", ""]
+		String[] arr = {"java", "json", "xml"};
+		
+		return arr;
+	}
+	
+	@RequestMapping("/ex7")
+	public List<String> method7() {// ["", "", ""]
+		List<String> list = new ArrayList<>();
+		list.add("donald");
+		list.add("duck");
+		list.add("hello");
+		
+		return list;
+	}
+	
+	@RequestMapping("/ex8")
+	public Map<String, String> method8() {// {"":"", "":"", "":""}
+		Map<String, String> map = new HashMap<>();
+		map.put("java", "script");
+		map.put("hello", "world");
+		map.put("spring", "boot");
+
+		return map;
+	}
+	
+	@RequestMapping("/ex9")
+	public List<Rest1> method9() {// [{object}. {object}]
+		List<Rest1> list = new ArrayList<>();
+		
+		Rest1 r1 = new Rest1();
+		r1.setName("eun");
+		r1.setAge(20);
+		r1.setVote(false);
+		
+		list.add(r1);
+		
+		Rest1 r2 = new Rest1();
+		r1.setName("yun");
+		r1.setAge(23);
+		r1.setVote(true);
+		
+		list.add(r2);
+		
+		return list;
+	}
+	
+	// 응답 : status code, response header, body
+	
+	// 특정 status code로 응답 시
+	@RequestMapping("/ex10")
+	public ResponseEntity<String> method10() {// body 타입: String
+		return ResponseEntity.status(200)// BodyBuilder 타입 리턴
+			.body("hello");// String 리턴
+	}
+	
+	@RequestMapping("/ex11")
+	public ResponseEntity<String> method11(int num) {
+		if (num > 0) {
+			return ResponseEntity.status(200).body("spring");
+		} else {
+			return ResponseEntity.status(404).body("");
+		}
 	}
 }
