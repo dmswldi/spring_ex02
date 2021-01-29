@@ -55,7 +55,7 @@ $(function(){
 		$.ajax({
 			type: 'PUT',/* method == type(옛날 버전) */
 			url: '/replies/' + rno,
-			data: '{"rno": ' + rno + ', "reply": "modified reply3"}',
+			data: '{"reply": "modified reply3"}',
 			contentType: 'application/json; charset=UTF-8'
 		});
 	});

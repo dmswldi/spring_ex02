@@ -19,9 +19,13 @@ $(function(){
 			url: '/replies/new',
 			contentType: 'application/json',
 			data: '{"bno": 205, "reply": "new Reply@!", "replyer": "user02"}',
-			complete: function(jqXHR, status){// 요청 끝난 후 실행
-				console.log('done');
-				console.log(status);// success
+			success: function(data, status, xhr){
+				console.log('등록 성공');
+				// console.log(jqXHR.responseText);				
+				console.log(data);// = xhr.responseText
+			},
+			error: function(){
+				console.log('등록 실패');
 			}
 		});
 	});
@@ -43,73 +47,57 @@ $(function(){
 			type: 'POST',
 			url: '/replies/new',
 			contentType: 'application/json',
-			data: '{"bno": 205, "reply": "new Reply@!!", "replyer": "user02"}',
-			complete: function(jqXHR, status){// 요청 끝난 후 실행
-				if (status === 'success'){
-					console.log(status);// success
-					console.log(jqXHR.responseText);
-				} else if (status === 'error'){
-					console.log(status);// or error										
-				}
-			}
+			data: '{"bno": 205, "reply": "new Reply@!!", "replyer": "user02"}'
+		}).done(function(data, status, xhr){/* ajax가 리턴하는 xhr.done() */
+			console.log(data);
+		}).fail(function(){
+			console.log('등록 실패');
 		});
 	});
 	
 	$('#btn-4').click(function(){
 		$.ajax({
-			url: '/replies/pages/205/1',
-			complete: function(jqXHR, status){// 요청 끝난 후 실행
-				if (status === 'success'){
-					console.log(status);// success
-					console.log(jqXHR.responseText);// List<ReplyVO>
-				} else if (status === 'error'){
-					console.log(status);// or error										
-				}
-			}
+			url: '/replies/pages/205/1'
+		}).done(function(data, status, xhr){
+			console.log(status);// success
+			console.log(data);// List<ReplyVO>	
+		}).fail(function(){
+			console.log('실패');
 		});
 	});
 	
 	$('#btn-5').click(function(){
 		$.ajax({
-			url: '/replies/50',
-			complete: function(jqXHR, status){// 요청 끝난 후 실행
-				if (status === 'success'){
-					console.log(status);
-					console.log(jqXHR.responseText);// ResponseEntity에 담긴 ReplyVO 객체
-				} else if (status === 'error'){
-					console.log(status);									
-				}
-			}
+			url: '/replies/50'
+		}).done(function(data, status, xhr){
+			console.log(status);
+			console.log(data);// ResponseEntity에 담긴 ReplyVO 객체
+		}).fail(function(){
+			console.log('실패');
 		});
 	});
 	
 	$('#btn-6').click(function(){
 		$.ajax({
 			method: 'DELETE',
-			url: '/replies/51',
-			complete: function(jqXHR, status){
-				if (status === 'success'){
-					console.log(jqXHR.responseText);
-				} else if (status === 'error'){
-					console.log(status);									
-				}
-			}
+			url: '/replies/52'
+		}).done(function(data, status, xhr){
+			console.log(data);
+		}).fail(function(){
+			console.log('삭제 실패');
 		});
 	});
 	
 	$('#btn-7').click(function(){
 		$.ajax({
 			method: 'PUT',
-			url: '/replies/50',
+			url: '/replies/50',/* rno 여기서 pathVariable로 넘어감 */
 			contentType: 'application/json',
-			data: '{"reply": "i have done modifying~!!!"}',
-			complete: function(jqXHR, status){
-				if (status === 'success'){
-					console.log(jqXHR.responseText);
-				} else if (status === 'error'){
-					console.log(status);									
-				}
-			}
+			data: '{"reply": "i have done modifying~!!!"}'
+		}).done(function(data, status, xhr){
+			console.log(data);
+		}).fail(function(){
+			console.log('수정 실패');
 		});
 	});
 });
@@ -118,7 +106,7 @@ $(function(){
 </head>
 <body>
 <div class="container">
-	<h1>AJAX ex2</h1>
+	<h1>AJAX ex4</h1>
 	<button id="btn-1" class="btn btn-primary">New Reply: Success</button>
 	<button id="btn-2" class="btn btn-primary">New Reply: Error</button> <br>
 	<button id="btn-3" class="btn btn-danger">New Reply: ?</button> <br>
