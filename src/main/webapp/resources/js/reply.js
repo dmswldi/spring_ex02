@@ -79,7 +79,7 @@ var replyService =(function() {
 		});
 	}
 	
-	function  get(rno, callback, error) {
+	function get(rno, callback, error) {
 		$.get(appRoot + '/replies/' + rno, function(data) { /* getJSON 안 해도 알아서 dataType 추론 */
 			if(callback) callback(data);
 		}).fail(function(){

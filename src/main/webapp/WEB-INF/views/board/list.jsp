@@ -87,7 +87,12 @@ table {
             		<c:param name="pageNum" value="${pageMaker.criteria.pageNum }" />
             		<c:param name="amount" value="${pageMaker.criteria.amount }" />
             	</c:url>
-            	<a href="${boardLink }"><i><c:out value="${board.title}" /></i></a>
+            	<a href="${boardLink }">
+            		<i><c:out value="${board.title}" /></i>
+            		<c:if test="${board.replyCnt gt 0 }">
+            			<span class="badge badge-info">${board.replyCnt }</span>
+            		</c:if>
+            	</a>
             </td>
             <td><c:out value="${board.writer}" /></td>
             <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}" /></td>

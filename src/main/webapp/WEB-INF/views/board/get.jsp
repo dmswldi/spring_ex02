@@ -19,6 +19,10 @@ var bno = ${board.bno};/* jsp 코드임 */
 <script src="${root }/resources/js/reply.js"></script>
 <script>
 $(function(){
+	function dateString(date){
+		var d = new Date(date);
+		return d.toISOString().split("T")[0];
+	}
 	
 	function showList(){
 		replyService.getList({bno: bno}, function(list){
@@ -29,11 +33,11 @@ $(function(){
 				//var replyDate = list[i].replyDate.getFullYear + '/' + list[i].replyDate.getMonth + 1 + '/' + list[i].replyDate.getDate;
 				var replyLI = '<li class="media" data-rno="' + list[i].rno + '">'
 					+ '<div class="media-body">'
-					+ '<h5>' + list[i].replyer + ' <small>' + list[i].replyDate + '</small></h5>'
+					+ '<h5>' + list[i].replyer + ' <small>' + dateString(list[i].replyDate) + '</small></h5>'
 					+ list[i].reply
 					+ '<hr></div>'
 					+ '</li>';
-				$('ul').append(replyLI);
+				$('#reply-ul').append(replyLI);
 			}
 			
 		}, function(err){
@@ -41,6 +45,7 @@ $(function(){
 		});
 	};
 	
+	$('#reply-ul').css('cursor', 'pointer');
 	
 	$('#new-reply-button').click(function(){
 		$('#new-reply-modal').modal('show');/* modal 사용법 */
@@ -53,7 +58,7 @@ $(function(){
 		
 		replyService.add(data, function(){
 			alert('댓글이 등록되었습니다.');
-			$('li').remove();// li 포함 태그 및 요소 지우기
+			$('#reply-ul li').remove();// li 포함 태그 및 요소 지우기
 			showList();// 댓글 목록 가져오기
 		}, function(err){
 			alert('댓글 등록에 실패하였습니다.');
@@ -61,6 +66,49 @@ $(function(){
 		});
 		$('#new-reply-modal').modal('hide');
 		$('.modal input').val('');
+	});
+	
+	
+	$('#reply-ul').on('click', 'li', function(){
+		// console.log($(this).attr('data-rno'));
+		var rno = $(this).attr('data-rno');
+		
+		replyService.get(rno, function(data){
+			$('#rno-input').val(rno);
+			$('#reply-input2').val(data.reply);
+			$('#replyer-input2').val(data.replyer);
+			$('#modify-reply-modal').modal('show');
+		}, function(err){
+			console.log(err);
+		});
+	});
+	
+	$('#reply-modify-button').click(function(){
+		var rno = $('#rno-input').val();
+		var reply = $('#reply-input2').val();
+		var data = {rno:rno, reply: reply};
+		
+		replyService.update(data, function(){
+			alert('댓글이 수정되었습니다.');
+			$('#modify-reply-modal').modal('hide');
+			$('#reply-ul li').remove();// li 포함 태그 및 요소 지우기
+			showList();// 댓글 목록 가져오기
+		}, function(err){
+			console.log(err);
+		});
+	});
+	
+	$('#reply-delete-button').click(function(){
+		var rno = $('#rno-input').val();
+		
+		replyService.remove(rno, function(){
+			alert('댓글이 삭제되었습니다.');
+			$('#modify-reply-modal').modal('hide');
+			$('#reply-ul li').remove();// li 포함 태그 및 요소 지우기
+			showList();// 댓글 목록 가져오기
+		}, function(err){
+			console.log(err);
+		});
 	});
 	
 	// 댓글 목록 가져오기 실행
@@ -144,7 +192,7 @@ $(function(){
 				</div>
 				
 				<div class="card-body">
-					<ul class="list-unstyled">
+					<ul id="reply-ul" class="list-unstyled">
 						
 					<%--
 						<li class="media" data-rno="21">
@@ -187,6 +235,36 @@ $(function(){
 			<div class="modal-footer">
 				<button class="btn btn-secondary" data-dismiss="modal">닫기</button>
 				<button id="reply-submit-button" class="btn btn-primary">등록</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%-- Modify Reply Modal --%>
+<div class="modal fade" id="modify-reply-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">수정 / 삭제</h5>
+				<button class="close" data-dismiss="modal">
+					<span>&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<input id="rno-input" type="hidden">
+				<div class="form-group">
+					<label for="reply-input2" class="col-form-label">댓글</label>
+					<input type="text" class="form-control" id="reply-input2">
+				</div>
+				<div class="form-group">
+					<label for="replyer-input2" class="col-form-label">작성자</label>
+					<input type="text" class="form-control" id="replyer-input2" readonly>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" data-dismiss="modal">닫기</button>
+				<button id="reply-modify-button" class="btn btn-primary">수정</button>
+				<button id="reply-delete-button" class="btn btn-danger">삭제</button>
 			</div>
 		</div>
 	</div>
