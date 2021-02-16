@@ -25,7 +25,7 @@
 	</div>
 	<div class="row">
 		<div class="col-12 col-sm-6 offset-sm-3">
-			<form method="post"> <%-- 같은 경로 생략 가능 action="${pageContext.request.contextPath }/board/register" --%>
+			<form method="post" enctype="multipart/form-data"> <%-- 같은 경로 생략 가능 action="${pageContext.request.contextPath }/board/register" --%>
 				<div class="form-group">
 					<label for="input1">제목</label>
 					<input name="title" type="text"
@@ -35,6 +35,11 @@
 				<div class="form-group">
 					<label for="textarea">내용</label>
 					<textarea name="content" class="form-control" id="textarea" rows="3"></textarea>
+				</div>
+				
+				<div class="form-group">
+					<label for="file">파일</label>
+					<input type="file" accept="image/*" multiple name="file" class="form-control" id="file" >
 				</div>
 
 				<div class="form-group">

@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
+import org.zerock.service.FileUpService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -26,6 +28,7 @@ import lombok.extern.log4j.Log4j;
 public class BoardController {
 	
 	private BoardService service;
+	private FileUpService fileUpSvc;
 
 	/*
 	public BoardController(BoardService service) {
@@ -62,7 +65,7 @@ public class BoardController {
 	
 	//@RequestMapping(value = "register", method = RequestMethod.POST)
 	@PostMapping("/register")
-	public String register(BoardVO board, RedirectAttributes rttr) {
+	public String register(BoardVO board, MultipartFile file, RedirectAttributes rttr) {
 		// 한 번 사용하고 사라지는 RedirectAttributes
 		/*
 		 BoardVO board = new BoardVO();
@@ -71,8 +74,20 @@ public class BoardController {
 		 board.setWriter(request.getParameter("writer"); 
 		 -> 스프링이 대신 해준다
 		 */
-		
+		board.setFilename("");// null 값 못 넣는대 왜지
 		service.register(board);
+
+		if(file != null) {
+			board.setFilename(board.getBno() + "_" + file.getOriginalFilename());			
+			service.modify(board);
+
+			//fileUpSvc.write(file, board.getFilename());
+			try {
+				fileUpSvc.transfer(file, board.getFilename());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		rttr.addFlashAttribute("result", board.getBno());
 		
@@ -112,7 +127,13 @@ public class BoardController {
 	}
 	
 	@PostMapping("/modify2")
-	public String modify2(BoardVO board, Criteria criteria, RedirectAttributes rttr) {
+	public String modify2(BoardVO board, MultipartFile file, Criteria criteria, RedirectAttributes rttr) {
+		if(file != null) {
+			board.setFilename(board.getBno() + "_" + file.getOriginalFilename());			
+		} else {
+			board.setFilename("");
+		}
+		
 		if(service.modify(board)) {
 			rttr.addFlashAttribute("result" ,"modSuccess");
 			rttr.addAttribute("bno", board.getBno());// addAttribute()한 것만 query string으로 넘어감
@@ -125,6 +146,14 @@ public class BoardController {
 			rttr.addAttribute("keyword", criteria.getKeyword());
 			rttr.addAttribute("pageNum", criteria.getPageNum());
 			rttr.addAttribute("amount", criteria.getAmount());
+			
+			// 이전 이미지 삭제 필요
+			//fileUpSvc.write(file, board.getFilename());
+			try {
+				fileUpSvc.transfer(file, board.getFilename());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return "redirect:/board/get";// model이 아닌 redirectAttribute에 붙여서 넘겨야 안 없어짐! (????)

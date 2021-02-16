@@ -146,6 +146,10 @@ $(function(){
 				<textarea name="content" class="form-control" id="textarea" rows="3" readonly><c:out value="${board.content }" /></textarea>
 			</div>
 
+			<div>
+				<img alt="${board.filename }" class="img-fluid" src="${staticPath }/${board.filename}">
+			</div>
+
 			<div class="form-group">
 				<label for="input1">작성자</label>
 				<input name="writer" type="text" value="<c:out value='${board.writer }' />"

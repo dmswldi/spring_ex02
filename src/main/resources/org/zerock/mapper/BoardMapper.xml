@@ -70,8 +70,8 @@
 	  <selectKey keyProperty="bno" order="BEFORE" resultType="long">
 	  	SELECT seq_board.nextval FROM dual
 	  </selectKey>
-  	INSERT INTO tbl_board (bno, title, content, writer)
-  	VALUES (#{bno}, #{title}, #{content}, #{writer})
+  	INSERT INTO tbl_board (bno, title, content, writer, filename)
+  	VALUES (#{bno}, #{title}, #{content}, #{writer}, #{filename})
   </insert>
   
   <select id="read" resultType="org.zerock.domain.BoardVO">
@@ -87,7 +87,8 @@
   	SET title = #{title}, 
   		content = #{content}, 
   		writer = #{writer}, 
-  		updateDate = SYSDATE
+  		updateDate = SYSDATE,
+  		filename = #{filename}
   	WHERE bno = #{bno}
   </update>
   

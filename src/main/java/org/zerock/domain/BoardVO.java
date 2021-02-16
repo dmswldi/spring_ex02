@@ -13,4 +13,6 @@ public class BoardVO {
 	private Date regdate;
 	private Date updatedate;
 	private int replyCnt;
+	
+	private String filename;
 }

@@ -34,7 +34,7 @@ $(function(){
 	</div>
 	<div class="row">
 		<div class="col-12 col-sm-6 offset-sm-3">
-			<form method="post" id="modify-form" action="${root }/board/modify2">
+			<form method="post" enctype="multipart/form-data" id="modify-form" action="${root }/board/modify2">
 			<%-- 같은 경로 action 생략 가능 get/post 차이 => 이렇게 하면 현재 주소창으로 action됨 -> input 추가 시 값이 중복으로 붙음 (like checkbox) --%>
 				<div class="form-group">
 					<label for="bno">번호</label>
@@ -51,6 +51,11 @@ $(function(){
 				<div class="form-group">
 					<label for="textarea">내용</label>
 					<textarea name="content" class="form-control" id="textarea" rows="3"><c:out value="${board.content }" /></textarea>
+				</div>
+				
+				<div class="form-group">
+					<label for="file">파일</label>
+					<input type="file" accept="image/*" name="file" class="form-control" id="file"> <!-- multiple -->
 				</div>
 
 				<div class="form-group">

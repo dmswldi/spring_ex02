@@ -13,7 +13,7 @@ public interface BoardMapper {
 	//@Select("SELECT * FROM tbl_board WHERE bno > 0") // or BoardMapper.xml
 	public List<BoardVO> getList();
 	
-	public List<BoardVO> getListWithPaging(Criteria criteria	);
+	public List<BoardVO> getListWithPaging(Criteria criteria);
 	
 	public void insert(BoardVO board);
 	
